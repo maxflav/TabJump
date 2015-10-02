@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Tab Jump",
+  "version": "0.1",
+  "background": {
+    "scripts": ["script.js"]
+  },
+  "commands": {
+    "jump-tab-next": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+K"
+      },
+      "description": "Move current tab to next window"
+    }
+  }
+}
