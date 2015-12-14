@@ -12,22 +12,24 @@ function doJumpTabNext() {
       return;
     }
     var tab = tabs[0];
-    // Got the tab now get the windows
-    console.log('tab');
-    console.log(tab);
 
     chrome.windows.getAll(function(windows) {
       var nextWindowId = getNextWindowId(windows, tab.windowId);
-      console.log(nextWindowId);
-      console.log('windows');
-      console.log(windows);
+
+      if (nextWindowId === -1) {
+        // TODO: Create a new window
+      } else {
+        chrome.tabs.move(tab.id, { windowId: nextWindowId, index: -1 });
+        // TODO: Focus the target window/tab
+      }
     });
   });
 }
 
 // Find the next window id in sequence after the current one
+// If there is only one window, returns -1
 function getNextWindowId(windows, currentWindowId) {
-  var lowestId = -1;
+  var lowestId = Infinity;
   var closestAbove = Infinity;
   windows.forEach(function(w) {
     var id = w.id;
@@ -45,6 +47,9 @@ function getNextWindowId(windows, currentWindowId) {
   });
 
   if (closestAbove === Infinity) {
+    if (lowestId === Infinity) {
+      return -1;
+    }
     return lowestId;
   }
   return closestAbove;
