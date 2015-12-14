@@ -17,10 +17,11 @@ function doJumpTabNext() {
       var nextWindowId = getNextWindowId(windows, tab.windowId);
 
       if (nextWindowId === -1) {
-        // TODO: Create a new window
+        chrome.windows.create({ tabId: tab.id, focused: true });
       } else {
         chrome.tabs.move(tab.id, { windowId: nextWindowId, index: -1 });
-        // TODO: Focus the target window/tab
+        chrome.tabs.update(tab.id, { active: true });
+        chrome.windows.update(nextWindowId, { focused: true });
       }
     });
   });
