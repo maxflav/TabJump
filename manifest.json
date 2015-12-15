@@ -8,9 +8,24 @@
   "commands": {
     "jump-tab-next": {
       "suggested_key": {
-        "default": "Ctrl+Shift+K"
+        "default": "Ctrl+Shift+K",
+        "mac": "Ctrl+Shift+K"
       },
       "description": "Move current tab to next window"
+    },
+    "move-tab-right": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+L",
+        "mac": "Ctrl+Shift+L"
+      },
+      "description": "Shift tab to the right"
+    },
+    "move-tab-left": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+H",
+        "mac": "Ctrl+Shift+H"
+      },
+      "description": "Shift tab to the left"
     }
   }
 }

@@ -4,14 +4,21 @@ function handleCommand(command) {
   if (command === "jump-tab-next") {
     doJumpTabNext();
   }
+
+  if (command === "move-tab-right") {
+    doMoveTabRight();
+  }
+
+  if (command === "move-tab-left") {
+    doMoveTabLeft();
+  }
 }
 
 function doJumpTabNext() {
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    if (!tabs || !tabs.length) {
+  getCurrentTab(function(tab) {
+    if (!tab) {
       return;
     }
-    var tab = tabs[0];
 
     chrome.windows.getAll(function(windows) {
       var nextWindowId = getNextWindowId(windows, tab.windowId);
@@ -24,6 +31,40 @@ function doJumpTabNext() {
         chrome.windows.update(nextWindowId, { focused: true });
       }
     });
+  });
+}
+
+function doMoveTabRight() {
+  doMoveTab(true);
+}
+
+function doMoveTabLeft() {
+  doMoveTab(false);
+}
+
+function doMoveTab(toTheRight) {
+  getCurrentTab(function(tab) {
+    if (!tab) {
+      return;
+    }
+
+    var newIndex = toTheRight ? tab.index + 1 : tab.index - 1;
+    chrome.tabs.move(tab.id, { index: newIndex }, function (movedTab) {
+      if (movedTab.index === tab.index) {
+        newIndex = toTheRight ? 0 : -1;
+        // It didn't move, wrap around.
+        chrome.tabs.move(tab.id, { index: newIndex });
+      }
+    });
+  });
+}
+
+function getCurrentTab(callback) {
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    if (!tabs || !tabs.length) {
+      return callback(null);
+    }
+    return callback(tabs[0]);
   });
 }
 
